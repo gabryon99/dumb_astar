@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
+        integrity="sha256-vK3UTo/8wHbaUn+dTQD0X6dzidqc5l7gczvH+Bnowwk=" crossorigin="anonymous" />
+    <style>
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        label {
+            color: white !important;
+        }
+
+        html {
+            background-color: #121212;
+        }
+
+        body,
+        html {
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content" style="margin-top: 1.2rem;">
+            <h1 class="title">A* Pathfinder</h1>
+            <p>Un test per disegnare una griglia su canvas, su cui applicare A*</p>
+            <hr>
+            <div class="container">
+                <div class="field is-grouped">
+                    <div class="field" style="margin-right: 0.1rem;">
+                        <label class="label">Start Position</label>
+                        <div class="control">
+                            <input id="startPosition" class="input" type="text" placeholder="0, 0">
+                        </div>
+                        <p class="help">Insert coordinates like: 'x, y'</p>
+                    </div>
+                    <div class="field" style="margin-right: 1rem;">
+                        <div class="control">
+                            <label class="label">End Position</label>
+                            <input id="endPosition" class="input" type="text" placeholder="0, 0">
+                        </div>
+                        <p class="help">Insert coordinates like: 'x, y'</p>
+                    </div>
+                    <div class="control">
+                        <label class="label">Heursitic Function</label>
+                        <div class="select">
+                            <select id="heuristic">
+                                <option value="euclide">Euclide Distance</option>
+                                <option value="manatthan">Manatthan Distance</option>
+                                <option value="dijikstra">Dijikstra</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="field is-grouped is-grouped-right">
+
+                    <div class="control">
+                        <button class="button is-success" onclick="execute()">Find Path!</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <canvas width="1280" height="720" id="playground"></canvas>
+    </div>
+    <script src="https://unpkg.com/tinyqueue@2.0.0/tinyqueue.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
