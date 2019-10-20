@@ -280,7 +280,6 @@ class PathFinder {
             const u = open_list.dequeue();
             copy_list = copy_list.filter((e) => e.x != u.x && e.y == u.y);
 
-            
             closed_list[u.get_name()] = u;
             final_path.push(u);
 
@@ -326,7 +325,6 @@ class PathFinder {
                     continue;
                 }
 
-                console.log("Added!");
                 j.parent = u;
 
                 open_list.queue(j);  
@@ -335,6 +333,9 @@ class PathFinder {
             }
         
         }
+
+        // check if end node is inside of path
+        if (!(end_node.get_name() in closed_list)) return [];
 
         let pi_node = final_path[final_path.length - 1];
         let real_path = [];
@@ -439,6 +440,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         const path = path_finder.find_path(start, end, heuristic_chosen, four_axis);
+        console.log(path);
+
+        if (path.length == 0) {
+            bulmaToast.toast({ 
+                message: "No path was found inside grid!",
+                type: "is-danger",
+                closeOnClick: true,
+                pauseOnHover: true,
+                duration: 3000,
+                animate: { in: "fadeIn", out: "fadeOut" }
+             });
+            return;
+        }
+
         path.forEach((node) => grid.color_tile(node.x, node.y, "#43A047", border_color));
     
         // color start and end
@@ -449,7 +464,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     remove_walls = () => {
         if (localStorage.getItem('wall_pattern') == undefined) {
-            alert(`There isn't anything to remove!`);
+            bulmaToast.toast({ 
+                message: "There aren't walls saved into storage!",
+                type: "is-danger",
+                closeOnClick: true,
+                pauseOnHover: true,
+                duration: 2000,
+             });
+            return;
         }
         localStorage.removeItem('wall_pattern');
     };
@@ -462,6 +484,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // save walls in web storage
         localStorage.setItem('wall_pattern', JSON.stringify(cookie));
+
+        bulmaToast.toast({ 
+            message: "Walls pattern saved into storage!",
+            type: "is-warning",
+            closeOnClick: true,
+            pauseOnHover: true,
+            duration: 2000,
+         });
 
     };
 
@@ -478,6 +508,14 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.color_tile(tile.x, tile.y, "#e53935", border_color);
             tile.walkable = false;
         });
+
+        bulmaToast.toast({ 
+            message: "Walls loaded from storage!",
+            type: "is-primary",
+            closeOnClick: true,
+            pauseOnHover: true,
+            duration: 2000,
+         });
 
     };
 
