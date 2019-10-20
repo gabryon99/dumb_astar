@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Canvas Test</title>
+    <title>Dumb A* path finding</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
         integrity="sha256-vK3UTo/8wHbaUn+dTQD0X6dzidqc5l7gczvH+Bnowwk=" crossorigin="anonymous" />
     <style>
@@ -35,7 +35,8 @@
     <div class="container">
         <div class="content" style="margin-top: 1.2rem;">
             <h1 class="title">A* Pathfinder</h1>
-            <p>Un test per disegnare una griglia su canvas, su cui applicare A*</p>
+            <p>Un test per disegnare una griglia su canvas, su cui applicare A*, <span>orange: start, blue: end</span>
+            </p>
             <hr>
             <div class="container">
                 <div class="field is-grouped">
@@ -63,10 +64,24 @@
                             </select>
                         </div>
                     </div>
-
+                    <div class="control">
+                        <label class="label">Can I move only in 4 directions?</label>
+                        <label class="checkbox">
+                            <input type="checkbox" id="four_axis">
+                            Only 4-axis
+                        </label>
+                    </div>
                 </div>
                 <div class="field is-grouped is-grouped-right">
-
+                    <div class="control">
+                        <button class="button is-warning" onclick="save_walls()">Save Walls</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-primary" onclick="load_walls()">Load Stored Walls</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-danger" onclick="remove_walls()">Remove Stored Walls</button>
+                    </div>
                     <div class="control">
                         <button class="button is-success" onclick="execute()">Find Path!</button>
                     </div>
@@ -76,7 +91,7 @@
         </div>
         <canvas width="1280" height="720" id="playground"></canvas>
     </div>
-    <script src="https://unpkg.com/tinyqueue@2.0.0/tinyqueue.min.js"></script>
+    <script src="priority-queue.min.js"></script>
     <script src="main.js"></script>
 </body>
 

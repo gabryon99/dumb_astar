@@ -59,3 +59,7 @@ typings/
 
 # next.js build output
 .next
+
+./backup.js
+./backup2.js
+./backup3.js

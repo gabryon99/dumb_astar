@@ -106,17 +106,6 @@ class Grid {
 
     }
 
-    clear_path() {
-        
-        for (let x = 0; x < this.width_count; x++) {
-            for (let y = 0; y < this.height_count; y++) {
-                if (this.tiles[x][y].walkable) {
-                    this.color_tile(x, y, this.fill_color, this.color);
-                }
-            }
-        }
-    }
-
     color_tile(x, y, color, border_color) {
 
         let tile = this.tiles[x][y];
@@ -208,6 +197,28 @@ class PathFinder {
         return dx + dy;
     }
 
+
+    /**
+     * 
+     * @param {PathNode[]} open_list 
+     */
+    poll_lowest_node(open_list) {
+
+        let min_f = open_list[0].f;
+        let returned_node = open_list[0];
+        let index = 0;
+
+        open_list.forEach((node, i) => {
+            if (node.f < min_f) {
+                min_f = node.f;
+                returned_node = node;
+                index = i;
+            }
+        });
+
+        return [returned_node, index];
+    }
+
     /**
      * 
      * @param {PathNode} u 
@@ -238,7 +249,16 @@ class PathFinder {
 
 
     is_in_open_list(j, open_list) {
-        return open_list.find(e => e.x == j.x && e.y == j.y);
+
+        let open_array = [];
+        let open_list_copy = Object.assign(open_list);
+        
+        while (open_list_copy.length) {
+            open_array.push(open_list_copy.pop());
+        }
+
+        return open_array.find(e => e.x == j.x && e.y == j.y);
+
     }
 
     /**
@@ -254,12 +274,11 @@ class PathFinder {
         // set the open list as a priority queue
         // and use a comparsion function 
         // that evaluates the f value of a path node
-        let open_list = new PriorityQueue({
-            comparator: (u, v) => u.f - v.f         
-        })
+        let open_list = new TinyQueue([], (u, v) => {
+            return u.f - v.f;
+        });
         // declare a closed list as dictonary
         let closed_list = {};
-        let copy_list = [];
 
         // declare start and end node
         const start_node = new PathNode(start[0], start[1], this.grid.tiles[start[0]][start[1]].walkable);
@@ -271,15 +290,18 @@ class PathFinder {
         // Create path 
         let final_path = [];
         // Push the first node inside open list
-        open_list.queue(start_node);
+        open_list.push(start_node);
 
         // while openList is
         while (open_list.length > 0) {
 
             // pop the lowest f node from priority queue
-            const u = open_list.dequeue();
-            copy_list = copy_list.filter((e) => e.x != u.x && e.y == u.y);
+            const u = open_list.pop();
+            const array = [];
+            const copy = Object.assign(open_list);
 
+            while (copy.length) array.push(copy.pop());
+            console.log(array);
             
             closed_list[u.get_name()] = u;
             final_path.push(u);
@@ -287,28 +309,17 @@ class PathFinder {
             // do i have reached the final node?
             if (u.x == end_node.x && u.y == end_node.y) break;
 
-            let adjacent_nodes = [];
-            if (only_four) {
-                adjacent_nodes = [
-                    this.create_adjacent_node(u,  0, -1, pool_nodes),
-                    this.create_adjacent_node(u, -1,  0, pool_nodes),
-                    this.create_adjacent_node(u, +1,  0, pool_nodes),
-                    this.create_adjacent_node(u,  0, +1, pool_nodes)
-                ];
-            }
-            else {
+            let adjacent_nodes = [
+                this.create_adjacent_node(u, -1, -1, pool_nodes),
+                this.create_adjacent_node(u,  0, -1, pool_nodes),
+                this.create_adjacent_node(u, +1, -1, pool_nodes),
+                this.create_adjacent_node(u, -1,  0, pool_nodes),
+                this.create_adjacent_node(u, +1,  0, pool_nodes),
+                this.create_adjacent_node(u, -1, +1, pool_nodes),
+                this.create_adjacent_node(u,  0, +1, pool_nodes),
+                this.create_adjacent_node(u, +1, +1, pool_nodes)
+            ];
 
-                adjacent_nodes = [
-                    this.create_adjacent_node(u, -1, -1, pool_nodes),
-                    this.create_adjacent_node(u,  0, -1, pool_nodes),
-                    this.create_adjacent_node(u, +1, -1, pool_nodes),
-                    this.create_adjacent_node(u, -1,  0, pool_nodes),
-                    this.create_adjacent_node(u, +1,  0, pool_nodes),
-                    this.create_adjacent_node(u, -1, +1, pool_nodes),
-                    this.create_adjacent_node(u,  0, +1, pool_nodes),
-                    this.create_adjacent_node(u, +1, +1, pool_nodes)
-                ];
-            }
             // remove null nodes inside adjacents list
             adjacent_nodes = adjacent_nodes.filter((n) => n != null);
             
@@ -321,48 +332,35 @@ class PathFinder {
                 j.h = h(j, end_node);
                 j.f = j.g + j.h;
 
-                let ex_j = this.is_in_open_list(j, copy_list);
+                let ex_j = this.is_in_open_list(j, open_list);
+                console.log(j, ex_j);
+
                 if (ex_j != null && j.g > ex_j.g) {
                     continue;
                 }
 
                 console.log("Added!");
-                j.parent = u;
-
-                open_list.queue(j);  
-                copy_list.push(j);
+                open_list.push(j);  
 
             }
         
         }
 
-        let pi_node = final_path[final_path.length - 1];
-        let real_path = [];
-
-        while (pi_node != null) {
-            real_path.push(pi_node);
-            pi_node = pi_node.parent;
-        }
-
-        return real_path.reverse();
+        return final_path;
     }
 
 
 }
 
 let execute = () => {};
-let save_walls = () => {};
-let load_walls = () => {};
-let remove_walls = () => {};
-
 
 document.addEventListener('DOMContentLoaded', () => {
 
     const canvas = document.getElementById("playground");
     const context = canvas.getContext("2d");
 
-    const width = 8;
-    const height = 8;
+    const width = 5;
+    const height = 5;
     const tile_color = "#121212";
     const border_color = "#363636";
 
@@ -397,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.color_tile(tile.x, tile.y, tile_color, border_color);
         }
         else {
-            grid.color_tile(tile.x, tile.y, "#e53935", border_color);
+            grid.color_tile(tile.x, tile.y, "red", border_color);
         }
 
         tile.walkable = !tile.walkable;
@@ -406,11 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     execute = () => {
 
-        // clear path
-        grid.clear_path();
-
         const path_finder = new PathFinder(grid);
-        const four_axis = document.getElementById("four_axis").checked;
 
         const start_value = document.getElementById("startPosition").value;
         const end_value = document.getElementById("endPosition").value;
@@ -422,8 +416,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const end = end_value.split(", ").map((splitted) => {
             return parseInt(splitted) - 1
         });
-
-        console.log(`From ${start} to ${end}`);
 
         const heuristic_name = document.getElementById("heuristic").value;
         let heuristic_chosen = () => {};
@@ -437,48 +429,14 @@ document.addEventListener('DOMContentLoaded', () => {
         else {
             heuristic_chosen = path_finder.dijikstra;
         }
-        
-        const path = path_finder.find_path(start, end, heuristic_chosen, four_axis);
-        path.forEach((node) => grid.color_tile(node.x, node.y, "#43A047", border_color));
-    
-        // color start and end
-        grid.color_tile(start[0], start[1], "#FB8C00", border_color);
-        grid.color_tile(end[0], end[1], "#1E88E5", border_color);
 
-    };
+        const four_axis = false;
+        const path = path_finder.find_path(start, end, heuristic_chosen, false);
+        console.log(path);
 
-    remove_walls = () => {
-        if (localStorage.getItem('wall_pattern') == undefined) {
-            alert(`There isn't anything to remove!`);
-        }
-        localStorage.removeItem('wall_pattern');
-    };
-
-    save_walls = () => {
-
-        // load tiles and coordinates
-        const coordinates = grid.tiles.map((row) => row.filter((tile) => !tile.walkable)).filter(e => e.length > 0).flat().map((e) => [e.x, e.y]);
-        const cookie = { walls: coordinates }
-
-        // save walls in web storage
-        localStorage.setItem('wall_pattern', JSON.stringify(cookie));
-
-    };
-
-    load_walls = () => {
-
-        // load walls form web storage
-        // {walls: [[x0, y0], [x1, y1], ..., [xn, yn]]}
-        const walls = JSON.parse(localStorage.getItem('wall_pattern')).walls;
-
-        // restore saved walls
-        walls.forEach((coord) => {
-            let tile = grid.tiles[coord[0]][coord[1]];
-            // color tile and set walkable
-            grid.color_tile(tile.x, tile.y, "#e53935", border_color);
-            tile.walkable = false;
-        });
-
+        path.forEach((node) => {
+            grid.color_tile(node.x, node.y, "green", border_color);
+        }); 
     };
 
 });
