@@ -321,9 +321,7 @@ class PathFinder {
                 j.f = j.g + j.h;
 
                 let ex_j = this.is_in_open_list(j, copy_list);
-                if (ex_j != null && j.g > ex_j.g) {
-                    continue;
-                }
+                if (ex_j != null && j.g > ex_j.g) continue;
 
                 j.parent = u;
 
@@ -444,11 +442,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (path.length == 0) {
             bulmaToast.toast({ 
-                message: "No path was found inside grid!",
+                message: "No paths were found!",
                 type: "is-danger",
                 closeOnClick: true,
                 pauseOnHover: true,
-                duration: 3000,
                 animate: { in: "fadeIn", out: "fadeOut" }
              });
             return;
@@ -469,7 +466,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: "is-danger",
                 closeOnClick: true,
                 pauseOnHover: true,
-                duration: 2000,
              });
             return;
         }
@@ -490,7 +486,6 @@ document.addEventListener('DOMContentLoaded', () => {
             type: "is-warning",
             closeOnClick: true,
             pauseOnHover: true,
-            duration: 2000,
          });
 
     };
@@ -514,7 +509,6 @@ document.addEventListener('DOMContentLoaded', () => {
             type: "is-primary",
             closeOnClick: true,
             pauseOnHover: true,
-            duration: 2000,
          });
 
     };

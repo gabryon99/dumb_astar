@@ -8,54 +8,33 @@
     <title>Dumb A* path finding</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css"
         integrity="sha256-vK3UTo/8wHbaUn+dTQD0X6dzidqc5l7gczvH+Bnowwk=" crossorigin="anonymous" />
-    <style>
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        p,
-        label {
-            color: white !important;
-        }
-
-        html {
-            background-color: #121212;
-        }
-
-        body,
-        html {
-            overflow-y: hidden;
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
 </head>
-
 <body>
     <div class="container">
         <div class="content" style="margin-top: 1.2rem;">
-            <h1 class="title">A* Pathfinder</h1>
-            <p>Un test per disegnare una griglia su canvas, su cui applicare A*, <span>orange: start, blue: end</span>
+            <h1 class="title has-text-white">A* Pathfinder</h1>
+            <p class="has-text-white">Un test per disegnare una griglia su canvas, su cui applicare A*, <span>orange: start, blue: end</span>
             </p>
             <hr>
             <div class="container">
                 <div class="field is-grouped">
                     <div class="field" style="margin-right: 0.1rem;">
-                        <label class="label">Start Position</label>
+                        <label class="label has-text-white">Start Position</label>
                         <div class="control">
                             <input id="startPosition" class="input" type="text" placeholder="0, 0">
                         </div>
-                        <p class="help">Insert coordinates like: 'x, y'</p>
+                        <p class="help has-text-white">Insert coordinates like: 'x, y'</p>
                     </div>
                     <div class="field" style="margin-right: 1rem;">
                         <div class="control">
-                            <label class="label">End Position</label>
+                            <label class="label has-text-white">End Position</label>
                             <input id="endPosition" class="input" type="text" placeholder="0, 0">
                         </div>
-                        <p class="help">Insert coordinates like: 'x, y'</p>
+                        <p class="help has-text-white">Insert coordinates like: 'x, y'</p>
                     </div>
                     <div class="control">
-                        <label class="label">Heursitic Function</label>
+                        <label class="label has-text-white">Heursitic Function</label>
                         <div class="select">
                             <select id="heuristic">
                                 <option value="euclide">Euclide Distance</option>
@@ -65,8 +44,8 @@
                         </div>
                     </div>
                     <div class="control">
-                        <label class="label">Can I move only in 4 directions?</label>
-                        <label class="checkbox">
+                        <label class="label has-text-white">Can I move only in 4 directions?</label>
+                        <label class="checkbox has-text-white">
                             <input type="checkbox" id="four_axis">
                             Only 4-axis
                         </label>
