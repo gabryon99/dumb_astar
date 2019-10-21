@@ -18,4 +18,8 @@ You can click 'Find Path!' button to evaluates the best path inside the grid.
 * You can select three heuristic function: Manatthan, Euclide, Dijikstra.
 
 ### Dependencies
-I use [Fast Priority Queue](https://www.npmjs.com/package/fastpriorityqueue) and [bulma toasts](https://www.npmjs.com/package/bulma-toast)
+I use [Fast Priority Queue](https://www.npmjs.com/package/fastpriorityqueue) and [Bulma Toasts](https://www.npmjs.com/package/bulma-toast)
+
+### Screenshots
+
+![First Screenshot](/screenshots/first.png)
