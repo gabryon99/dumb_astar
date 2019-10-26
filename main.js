@@ -64,7 +64,8 @@ class Grid {
                 let new_tile = new GridTile(i, j, this.tile_size, this.tile_size, {
                     x: this.tile_size / 2 * (j + 1),
                     y: this.tile_size / 2 * (i + 1)
-                }, true);          
+                }, true);
+                          
                 // add tile inside matrix[i, j]
                 this.tiles[i].push(new_tile);            
             }

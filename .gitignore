@@ -60,6 +60,10 @@ typings/
 # next.js build output
 .next
 
+# some backup files
 backup.js
 backup2.js
 backup3.js
+
+# vs code workspace
+dumb_astar.code-workspace
